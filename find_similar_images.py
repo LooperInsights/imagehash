@@ -14,7 +14,7 @@ def find_similar_images(userpaths, hashfunc = imagehash.average_hash):
         f = filename.lower()
         return f.endswith(".png") or f.endswith(".jpg") or \
             f.endswith(".jpeg") or f.endswith(".bmp") or f.endswith(".gif") or '.jpg' in f
-    
+
     image_filenames = []
     for userpath in userpaths:
         image_filenames += [os.path.join(userpath, path) for path in os.listdir(userpath) if is_image(path)]
@@ -29,7 +29,7 @@ def find_similar_images(userpaths, hashfunc = imagehash.average_hash):
             if 'dupPictures' in img:
                 print('rm -v', img)
         images[hash] = images.get(hash, []) + [img]
-    
+
     #for k, img_list in six.iteritems(images):
     #    if len(img_list) > 1:
     #        print(" ".join(img_list))
@@ -42,17 +42,15 @@ if __name__ == '__main__':
 
 Identifies similar images in the directory.
 
-Method: 
+Method:
   ahash:      Average hash
   phash:      Perceptual hash
   dhash:      Difference hash
-  whash-haar: Haar wavelet hash
-  whash-db4:  Daubechies wavelet hash
 
 (C) Johannes Buchner, 2013-2017
 """ % sys.argv[0])
         sys.exit(1)
-    
+
     hashmethod = sys.argv[1] if len(sys.argv) > 1 else usage()
     if hashmethod == 'ahash':
         hashfunc = imagehash.average_hash
@@ -60,13 +58,9 @@ Method:
         hashfunc = imagehash.phash
     elif hashmethod == 'dhash':
         hashfunc = imagehash.dhash
-    elif hashmethod == 'whash-haar':
-        hashfunc = imagehash.whash
-    elif hashmethod == 'whash-db4':
-        hashfunc = lambda img: imagehash.whash(img, mode='db4')
     else:
         usage()
     userpaths = sys.argv[2:] if len(sys.argv) > 2 else "."
     find_similar_images(userpaths=userpaths, hashfunc=hashfunc)
-    
+
 
